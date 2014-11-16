@@ -12,8 +12,8 @@
 package main
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 // not sure these functions should be mocked or not.
@@ -46,7 +46,7 @@ func TestWriter(t *testing.T) {
 	if err != nil {
 		t.Error("err")
 	}
-}	
+}
 func TestGetHeader(t *testing.T) {
 	expected := "<!DOCTYPE html><html><title>title</title><xmp theme=\"theme\" style=\"display:none;\">"
 	gs := NewGenStrapper("sample.md", "title", "theme", MockReader, MockWriter)

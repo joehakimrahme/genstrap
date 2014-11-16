@@ -19,12 +19,12 @@ import (
 	"os"
 )
 
-type FileReader func (filename string) ([]byte, error)
-type FileWriter func (filename string, text []byte, mode os.FileMode) error
+type FileReader func(filename string) ([]byte, error)
+type FileWriter func(filename string, text []byte, mode os.FileMode) error
 
 type GenStrapper struct {
-	html_filename string
-	html_title string
+	html_filename        string
+	html_title           string
 	html_bootstrap_theme string
 
 	reader FileReader
@@ -32,12 +32,12 @@ type GenStrapper struct {
 }
 
 func NewGenStrapper(filename string, title string, theme string, filereader FileReader, filewriter FileWriter) *GenStrapper {
-	return &GenStrapper {
-		html_filename: filename,
-		html_title: title,
+	return &GenStrapper{
+		html_filename:        filename,
+		html_title:           title,
 		html_bootstrap_theme: theme,
-		reader: filereader,
-		writer: filewriter,
+		reader:               filereader,
+		writer:               filewriter,
 	}
 }
 
@@ -46,7 +46,7 @@ func (gs *GenStrapper) ReadFile() ([]byte, error) {
 }
 
 func (gs *GenStrapper) WriteFile() error {
-	return gs.writer(gs.html_filename + ".html", []byte(gs.GetStrapFile()), 0644)
+	return gs.writer(gs.html_filename+".html", []byte(gs.GetStrapFile()), 0644)
 }
 
 func (gs *GenStrapper) GetHeader() string {
@@ -63,7 +63,7 @@ func (gs *GenStrapper) GetStrapFile() string {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	return gs.GetHeader() + string(txt) + gs.GetFooter()
 }
 
@@ -80,7 +80,7 @@ func main() {
 	flag.Parse()
 
 	gs := NewGenStrapper(filename, title, bootstrap_theme, ioutil.ReadFile, ioutil.WriteFile)
-	
+
 	// write output file
 	err := gs.WriteFile()
 	if err != nil {
