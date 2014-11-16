@@ -14,58 +14,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
-	"os"
 )
-
-type FileReader func(filename string) ([]byte, error)
-type FileWriter func(filename string, text []byte, mode os.FileMode) error
-
-type GenStrapper struct {
-	html_filename        string
-	html_title           string
-	html_bootstrap_theme string
-
-	reader FileReader
-	writer FileWriter
-}
-
-func NewGenStrapper(filename string, title string, theme string, filereader FileReader, filewriter FileWriter) *GenStrapper {
-	return &GenStrapper{
-		html_filename:        filename,
-		html_title:           title,
-		html_bootstrap_theme: theme,
-		reader:               filereader,
-		writer:               filewriter,
-	}
-}
-
-func (gs *GenStrapper) ReadFile() ([]byte, error) {
-	return gs.reader(gs.html_filename)
-}
-
-func (gs *GenStrapper) WriteFile() error {
-	return gs.writer(gs.html_filename+".html", []byte(gs.GetStrapFile()), 0644)
-}
-
-func (gs *GenStrapper) GetHeader() string {
-	return fmt.Sprintf("<!DOCTYPE html><html><title>%s</title><xmp theme=\"%s\" style=\"display:none;\">", gs.html_title, gs.html_bootstrap_theme)
-}
-
-func (gs *GenStrapper) GetFooter() string {
-	return "</xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>"
-}
-
-func (gs *GenStrapper) GetStrapFile() string {
-	txt, err := gs.ReadFile()
-
-	if err != nil {
-		panic(err)
-	}
-
-	return gs.GetHeader() + string(txt) + gs.GetFooter()
-}
 
 func main() {
 
